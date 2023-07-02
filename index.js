@@ -7,24 +7,23 @@ const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
-const personality = '会話内容は関西弁で、できるだけ簡潔にして。';
+const personality = '回答はできるだけ簡潔にして。';
 
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
     },
     handle(handlerInput) {
-        const speechText = 'AIアシスタントやで。何でも聞いてや！';
+        const speechText = 'なんでもアシスタントです。なんでも聞いてください。';
 
         return handlerInput.responseBuilder
             .speak(speechText)
             .reprompt(speechText)
-            .withSimpleCard('AIアシスタントやで。何でも聞いてや！', speechText)
+            .withSimpleCard('なんでもアシスタントです。なんでも聞いてください。', speechText)
             .getResponse();
     },
 };
 
-const conversationHistory = [];
 const AskEverythingIntentHandler = {
     canHandle(handlerInput) {
         return (
@@ -38,22 +37,15 @@ const AskEverythingIntentHandler = {
         if (questionSlot && questionSlot.value) {
             question = questionSlot.value;
         }
-        conversationHistory.push(`ユーザー: ${question}`);
 
-        let prompt = '\n';
-        for (let message of conversationHistory) {
-            prompt += `${message}\n`;
-        }
-        prompt += 'AI: ';
-
-        console.log('prompt:', prompt);
+        console.log('question:', question);
 
         const completion = await openai.createChatCompletion({
             model: 'gpt-3.5-turbo',
-            temperature: 1.0, // 生成テキストの多様性
+            temperature: 0.5,
             messages: [
                 { role: 'system', content: personality },
-                { role: 'user', content: prompt },
+                { role: 'user', content: question },
             ],
         });
 
