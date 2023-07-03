@@ -14,12 +14,12 @@ const LaunchRequestHandler = {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
     },
     handle(handlerInput) {
-        const speechText = 'なんでもアシスタントです。なんでも聞いてください。';
+        const speechText = 'なんでもアシスタントです。何が知りたいですか？';
 
         return handlerInput.responseBuilder
             .speak(speechText)
             .reprompt(speechText)
-            .withSimpleCard('なんでもアシスタントです。なんでも聞いてください。', speechText)
+            .withSimpleCard('なんでもアシスタントです。何が知りたいですか？', speechText)
             .getResponse();
     },
 };
@@ -87,11 +87,11 @@ const CancelAndStopIntentHandler = {
         );
     },
     handle(handlerInput) {
-        const speechText = 'さようなら。';
+        const speechText = 'またいつでも呼んでください。';
 
         return handlerInput.responseBuilder
             .speak(speechText)
-            .withSimpleCard('さようなら。', speechText)
+            .withSimpleCard('またいつでも呼んでください。', speechText)
             .withShouldEndSession(true)
             .getResponse();
     },
